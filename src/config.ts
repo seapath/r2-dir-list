@@ -1,20 +1,21 @@
 import { Env, SiteConfig } from './types';
 
 export function getSiteConfig(env: Env, domain: string): SiteConfig | undefined {
-    const configs: {[domain: string]: SiteConfig} = {
-        'bucketdomain.example.com': {
-            name: "Name of your website",
+    const configs: { [domain: string]: SiteConfig } = {
+        'releases.seapath.org': {
+            name: 'SEAPATH releases',
             bucket: env.BUCKET_bucketname,
             desp: {
-                '/': "Description of your website at default",
-                '/path': "Description of your website at /path",
-                '/path/to/file.txt': "Description of file /path/to/file.txt",
+                '/': 'SEAPATH releases',
+                '/builds': 'Weekly builds',
+                '/seapath-installer-bundled': 'Official SEAPATH releases',
+                '/favicon.png': 'SEAPATH favicon',
             },
-            showPoweredBy: true, // Set to false to hide the "Powered by" information at footer
+            showPoweredBy: false, // Set to false to hide the "Powered by" information at footer
 
             /// Decode URI when listing objects, useful when you have space or special characters in object key
             /// Recommended to enable it for new installations, but default to false for backward compatibility
-            decodeURI: true, 
+            decodeURI: true,
 
             /// [Optional] redirect function
             /// Example: redirect requests for '/old-path' to '/new-path' and force the redirect even if
@@ -40,14 +41,14 @@ export function getSiteConfig(env: Env, domain: string): SiteConfig | undefined 
             // legalInfo: "Legal information of your website",
 
             /// [Optional] favicon, should be a URL to **PNG IMAGE**. Default to Cloudflare R2's logo
-            // favicon: ''
+            favicon: 'favicon.png',
 
             /// [Optional] **Dangerous**: Enabling it may disrupte the normal reading of existing object
             /// By default, r2-dir-list will not list directory if the request path is a object to prevent disrupting
             /// the normal reading of existing object.
             /// Enabling this will allow r2-dir-list to list directory even if the request path is a 0-byte object.
             /// Do not use them unless you know what you are doing!
-            // dangerousOverwriteZeroByteObject: false,
+            dangerousOverwriteZeroByteObject: true,
         },
     };
     return configs[domain];

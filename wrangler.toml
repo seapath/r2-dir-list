@@ -4,13 +4,13 @@ compatibility_date = "2023-03-01"
 
 workers_dev = false
 routes = [
-    { pattern = "bucketdomain.example.com/*", zone_name = "example.com" }
+    { pattern = "releases.seapath.org/*", zone_name = "seapath.org" }
 ]
 
 # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
 # Docs: https://developers.cloudflare.com/r2/api/workers/workers-api-usage/
 r2_buckets  = [
-    { binding = "BUCKET_bucketname", bucket_name = "bucketname"}
+    { binding = "BUCKET_bucketname", bucket_name = "seapath-releases"}
 ]
 
 [observability]

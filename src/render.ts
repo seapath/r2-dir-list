@@ -156,19 +156,28 @@ var humanFileSize = (bytes: number, si = false, dp = 1) => {
 };
 
 function findDesp(siteConfig: SiteConfig, path: string, exact: boolean): string | undefined {
-    if (exact) {
-        return siteConfig.desp[path];
-    }
+    const exactMatch = siteConfig.desp[path];
+    if (exactMatch) return exactMatch;
+
     const keys = Object.keys(siteConfig.desp);
-    // find the longest match
-    let longestMatch = '/';
+    // Find the longest matching rule so more specific wildcard/prefix rules win.
+    let longestMatch = exact ? '' : '/';
     for (const key of keys) {
-        if (path.startsWith(key) && key.length > longestMatch.length) {
+        const matches = key.includes('*') ? wildcardMatches(key, path) : !exact && path.startsWith(key);
+        if (matches && key.length > longestMatch.length) {
             longestMatch = key;
         }
     }
-    const desp = siteConfig.desp[longestMatch];
-    return desp;
+    return longestMatch ? siteConfig.desp[longestMatch] : undefined;
+}
+
+function wildcardMatches(pattern: string, path: string): boolean {
+    const regexPattern = pattern.split('*').map(escapeRegExp).join('.*');
+    return new RegExp(`^${regexPattern}$`).test(path);
+}
+
+function escapeRegExp(value: string): string {
+    return value.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function generateFooter(siteConfig: SiteConfig, path: string): string {
